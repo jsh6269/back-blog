@@ -131,7 +131,11 @@ class SignOutView(APIView):
             return Response(
                 {"detail": "no refresh token"}, status=status.HTTP_400_BAD_REQUEST
             )
-        RefreshToken(refresh_token).blacklist()
+        try:
+            RefreshToken(refresh_token).blacklist()
+        except Exception:
+            pass
+
         res = Response(status=status.HTTP_204_NO_CONTENT)
         res.delete_cookie("access_token")
         res.delete_cookie("refresh_token")
